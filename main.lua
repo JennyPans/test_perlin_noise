@@ -4,9 +4,10 @@ local SCREEN_WIDTH = love.graphics.getWidth()
 local SCREEN_HEIGHT = love.graphics.getHeight()
 local seed = love.math.random(1000)
 local time = 0
-local PLANET_WIDTH = 60 * 7
-local PLANET_HEIGHT = 60 * 7
+local PLANET_WIDTH = 400
+local PLANET_HEIGHT = 400
 local canvas = love.graphics.newCanvas(PLANET_WIDTH, PLANET_HEIGHT)
+local display_planet = false
 
 local plan_to_sphere = love.graphics.newShader([[
   const number pi = 3.14159265;
@@ -59,7 +60,9 @@ local function generate_ground()
 end
 
 function love.keypressed(key)
-    generate_ground()
+    if key == "space" then
+        display_planet = not display_planet
+    end
 end
 
 function love.load()
@@ -85,7 +88,9 @@ function love.draw()
         end
     end
     love.graphics.setCanvas()
-    love.graphics.setShader(plan_to_sphere)
+    if display_planet then
+        love.graphics.setShader(plan_to_sphere)
+    end
     love.graphics.draw(
         canvas,
         SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
